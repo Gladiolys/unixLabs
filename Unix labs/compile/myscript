@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+     echo add filename in script args
+else
+     OUTPUT_FILE_NAME_STRING=`cat ./$1 | grep "//#output" -m 1`
+     
+     if [ $? -eq 0 ]; then
+        
+        #echo $OUTPUT_FILE_NAME_STRING
+        OUTPUT_FILE_NAME_WITH_WHITESPACE=${OUTPUT_FILE_NAME_STRING#*//#output}
+        echo $OUTPUT_FILE_NAME_WITH_WHITESPACE
+        OUTPUT_FILE_NAME=`echo $OUTPUT_FILE_NAME_WITH_WHITESPACE | tr -d '[:space:]'`
+        #echo $OUTPUT_FILE_NAME
+        
+        if [ -z $OUTPUT_FILE_NAME ]; then
+            echo enter valid output filename in source file
+           
+        else
+            TEMPFOLDER_PATH=`mktemp -d`
+            #echo $TEMPFOLDER_PATH
+            
+            trap "rm -Rf $TEMPFOLDER_PATH; exit 0" SIGKILL SIGINT SIGHUP SIGTERM
+            #echo $TEMPFOLDER_PATH
+            cp $1 $TEMPFOLDER_PATH/
+            
+            gcc $TEMPFOLDER_PATH/$1 -o $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME
+            
+            mv $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME ./
+            rm -Rf $TEMPFOLDER_PATH
+        fi
+        
+    else
+        echo 'enter existing file name or write //#output name - in file content' 
+    fi
+     
+fi
+exit 0

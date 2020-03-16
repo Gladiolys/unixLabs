@@ -1,0 +1,1 @@
+/usr/bin/c++  -pthread -g   CMakeFiles/threads_messaging.dir/main.cpp.o  -o threads_messaging 
