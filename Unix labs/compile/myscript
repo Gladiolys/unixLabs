@@ -7,27 +7,32 @@ else
      
      if [ $? -eq 0 ]; then
         
-        #echo $OUTPUT_FILE_NAME_STRING
         OUTPUT_FILE_NAME_WITH_WHITESPACE=${OUTPUT_FILE_NAME_STRING#*//#output}
-        echo $OUTPUT_FILE_NAME_WITH_WHITESPACE
         OUTPUT_FILE_NAME=`echo $OUTPUT_FILE_NAME_WITH_WHITESPACE | tr -d '[:space:]'`
-        #echo $OUTPUT_FILE_NAME
         
         if [ -z $OUTPUT_FILE_NAME ]; then
             echo enter valid output filename in source file
            
         else
             TEMPFOLDER_PATH=`mktemp -d`
-            #echo $TEMPFOLDER_PATH
             
-            trap "rm -Rf $TEMPFOLDER_PATH; exit 0" SIGKILL SIGINT SIGHUP SIGTERM
-            #echo $TEMPFOLDER_PATH
+            trap "rm -Rf $TEMPFOLDER_PATH; exit 1" SIGKILL SIGINT SIGHUP SIGTERM
+
             cp $1 $TEMPFOLDER_PATH/
             
             gcc $TEMPFOLDER_PATH/$1 -o $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME
             
+            if [ $? -eq 0 ]; then
+            
             mv $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME ./
             rm -Rf $TEMPFOLDER_PATH
+            
+            echo $OUTPUT_FILE_NAME - build file name
+            
+            else
+                echo compilation failed
+                rm -Rf $TEMPFOLDER_PATH
+            fi
         fi
         
     else

@@ -1,45 +1,44 @@
 #include <unistd.h>
-#include <cstdlib>
 #include <cstdio>
 #include <pthread.h>
 
-int descriptorArr[2];
+pthread_cond_t cond1 = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+int ready = 0;
 
 void *consumer(void *unusedParam)
 {
     while (true) {
-        int receiveMessage = 0;
-        int receivedMessageSize;
+        pthread_mutex_lock(&lock);
 
-        receivedMessageSize = read (descriptorArr[0], &receiveMessage, sizeof(receiveMessage));
-
-        if (receivedMessageSize != sizeof(receiveMessage)) {
-            perror("Consumer: read from pipe error");
-            exit(2);
+        while (ready == 0) {
+            pthread_cond_wait(&cond1, &lock);
+            printf("awoke \n");
         }
 
-        printf ("Consumer: %d\n",receiveMessage);
+        ready = 0;
+        printf("consumed \n");
+
+        pthread_mutex_unlock(&lock);
     }
 }
 
 
 void *provider(void *unusedParam)
 {
-    int count = 0;
-    int sendedMessageSize;
-
     while (true) {
+        pthread_mutex_lock(&lock);
 
-        sendedMessageSize = write (descriptorArr[1], &count, sizeof(count));
-
-        if (sendedMessageSize != sizeof(count)) {
-            perror ("Provider: write in pipe error");
-            exit (3);
+        if(ready == 1) {
+            pthread_mutex_unlock(&lock);
+            continue;
         }
 
-        printf ("Provider: %d\n", count);
+        ready = 1;
 
-        count++;
+        printf("provided \n");
+        pthread_cond_signal(&cond1);
+        pthread_mutex_unlock(&lock);
 
         sleep (1);
     }
@@ -48,18 +47,12 @@ void *provider(void *unusedParam)
 int main()
 {
     pthread_t thread1,thread2;
-    int result;
-
-    result = pipe(descriptorArr);
-
-    if (result < 0) {
-        perror("Create pipe Error");
-        exit(1);
-    }
 
     pthread_create(&thread1, nullptr, consumer, nullptr);
     pthread_create(&thread2, nullptr, provider, nullptr);
 
     pthread_join(thread1,nullptr);
     pthread_join(thread2,nullptr);
+    pthread_mutex_destroy(&lock);
+    pthread_cond_destroy(&cond1);
 }

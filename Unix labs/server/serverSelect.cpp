@@ -1,6 +1,5 @@
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <ctime>
 #include <netinet/in.h>
 #include <cstdio>
 #include <unistd.h>
@@ -8,12 +7,14 @@
 #include <algorithm>
 #include <set>
 #include <csignal>
+#include <cstring>
 
 using namespace std;
 
+volatile sig_atomic_t wasSigHup = 0;
+
 void handleSignal(int signum) {
-    printf("Caught signal %d\n",signum);
-    exit(signum);
+    wasSigHup = 1;
 }
 
 void handleError(const char *msg)
@@ -27,8 +28,6 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in serverAddress{};
     char buffer[256];
 
-    signal(SIGINT, handleSignal);
-
     listenSocketFd = socket(AF_INET, SOCK_STREAM, 0);
 
     if (listenSocketFd < 0)
@@ -39,7 +38,7 @@ int main(int argc, char *argv[]) {
     port = argc < 2 ? 50000 : atoi(argv[1]);
 
     serverAddress.sin_family = AF_INET;
-    serverAddress.sin_addr.s_addr = INADDR_ANY;
+    serverAddress.sin_addr.s_addr = htonl(INADDR_ANY);
     serverAddress.sin_port = htons(port);
 
     if (bind(listenSocketFd, (struct sockaddr *)&serverAddress, sizeof(serverAddress)) < 0)
@@ -47,8 +46,21 @@ int main(int argc, char *argv[]) {
 
     listen(listenSocketFd, 5);
 
+
     set<int> clientSocketSet;
     clientSocketSet.clear();
+
+    struct sigaction act{};
+    memset(&act, 0, sizeof(act));
+    act.sa_handler = handleSignal;
+    sigset_t mask;
+    sigset_t oldMask;
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGINT);
+    act.sa_mask = mask;
+    sigaction(SIGINT, &act, nullptr);
+
+    sigprocmask(SIG_BLOCK, &mask, &oldMask);
 
     while (true) {
         fd_set readFdSet;
@@ -59,9 +71,9 @@ int main(int argc, char *argv[]) {
         for (set<int>::iterator it = clientSocketSet.begin(); it != clientSocketSet.end(); it++)
             FD_SET(*it, &readFdSet);
 
-        timeval timeout{};
+        timespec timeout{};
         timeout.tv_sec = 300;
-        timeout.tv_usec = 0;
+        timeout.tv_nsec = 0;
 
         if (clientSocketSet.empty()) {
             printf("No connections, waiting 300 second and down\n");
@@ -69,9 +81,16 @@ int main(int argc, char *argv[]) {
 
         int maxFdId = max(listenSocketFd, *max_element(clientSocketSet.begin(), clientSocketSet.end()));
 
-        if (select(maxFdId+1, &readFdSet, nullptr, nullptr, &timeout) <= 0)
-            handleError("Error on select, may be time limit end");
-
+        if (pselect(maxFdId+1, &readFdSet, nullptr, nullptr, &timeout, &oldMask) <= 0){
+            if (errno == EINTR) {
+                if (wasSigHup == 1) {
+                    printf("signal catch");
+                    wasSigHup = 0;
+                }
+            } else {
+                handleError("Error on select, may be time limit end");
+            }
+        }
 
         if (FD_ISSET(listenSocketFd, &readFdSet)) {
             int acceptFdSocket = accept(listenSocketFd, nullptr, nullptr);
