@@ -2,6 +2,7 @@
 
 if [ -z $1 ]; then
      echo add filename in script args
+     exit 1
 else
      OUTPUT_FILE_NAME_STRING=`cat ./$1 | grep "//#output" -m 1`
      
