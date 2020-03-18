@@ -12,6 +12,7 @@ else
         
         if [ -z $OUTPUT_FILE_NAME ]; then
             echo enter valid output filename in source file
+            exit 1
            
         else
             TEMPFOLDER_PATH=`mktemp -d`
@@ -38,6 +39,7 @@ else
         
     else
         echo 'enter existing file name or write //#output name - in file content' 
+        exit 1
     fi
      
 fi
