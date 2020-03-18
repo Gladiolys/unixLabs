@@ -32,6 +32,7 @@ else
             else
                 echo compilation failed
                 rm -Rf $TEMPFOLDER_PATH
+                exit 1
             fi
         fi
         
