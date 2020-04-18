@@ -11,7 +11,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="73b53a16-a20d-41cb-9eb0-e9c2a0f9ea12" name="Default Changelist" comment="" />
+    <list default="true" id="73b53a16-a20d-41cb-9eb0-e9c2a0f9ea12" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server.dir/serverSelect.cpp.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/server.dir/serverSelect.cpp.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/server" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/server" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/serverSelect.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/serverSelect.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +26,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="ProjectId" id="1Z9O7EHmWNaIMvqTIvJdrF3wEs0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -75,21 +84,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="736" y="278" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1584253955953" />
-    <state width="1860" height="250" key="GridCell.Tab.0.bottom" timestamp="1584262882144">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1860" height="261" key="GridCell.Tab.0.bottom" timestamp="1587204937186">
+      <screen x="0" y="0" width="1920" height="1028" />
     </state>
+    <state width="1860" height="261" key="GridCell.Tab.0.bottom/0.0.1920.1028@0.0.1920.1028" timestamp="1587204937186" />
     <state width="1860" height="250" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1584262882144" />
-    <state width="1860" height="250" key="GridCell.Tab.0.center" timestamp="1584262882142">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1860" height="261" key="GridCell.Tab.0.center" timestamp="1587204937186">
+      <screen x="0" y="0" width="1920" height="1028" />
     </state>
+    <state width="1860" height="261" key="GridCell.Tab.0.center/0.0.1920.1028@0.0.1920.1028" timestamp="1587204937186" />
     <state width="1860" height="250" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1584262882142" />
-    <state width="1860" height="250" key="GridCell.Tab.0.left" timestamp="1584262882141">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1860" height="261" key="GridCell.Tab.0.left" timestamp="1587204937185">
+      <screen x="0" y="0" width="1920" height="1028" />
     </state>
+    <state width="1860" height="261" key="GridCell.Tab.0.left/0.0.1920.1028@0.0.1920.1028" timestamp="1587204937185" />
     <state width="1860" height="250" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1584262882141" />
-    <state width="1860" height="250" key="GridCell.Tab.0.right" timestamp="1584262882143">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1860" height="261" key="GridCell.Tab.0.right" timestamp="1587204937186">
+      <screen x="0" y="0" width="1920" height="1028" />
     </state>
+    <state width="1860" height="261" key="GridCell.Tab.0.right/0.0.1920.1028@0.0.1920.1028" timestamp="1587204937186" />
     <state width="1860" height="250" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1584262882143" />
     <state width="1860" height="275" key="GridCell.Tab.1.bottom" timestamp="1584262759053">
       <screen x="0" y="0" width="1920" height="1040" />

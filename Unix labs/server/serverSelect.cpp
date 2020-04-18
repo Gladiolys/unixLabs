@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
     sigset_t oldMask;
     sigemptyset(&mask);
     sigaddset(&mask, SIGINT);
+    act.sa_flags |= SA_RESTART;
     act.sa_mask = mask;
     sigaction(SIGINT, &act, nullptr);
 
@@ -86,6 +87,7 @@ int main(int argc, char *argv[]) {
                 if (wasSigHup == 1) {
                     printf("signal catch");
                     wasSigHup = 0;
+                    continue;
                 }
             } else {
                 handleError("Error on select, may be time limit end");
