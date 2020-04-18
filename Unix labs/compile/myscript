@@ -22,11 +22,18 @@ else
 
             cp $1 $TEMPFOLDER_PATH/
             
-            gcc $TEMPFOLDER_PATH/$1 -o $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME
+            CURRENT_DIR=$(pwd)
+            
+            cd $TEMPFOLDER_PATH
+            
+            gcc $1 -o $OUTPUT_FILE_NAME
             
             if [ $? -eq 0 ]; then
             
-            mv $TEMPFOLDER_PATH/$OUTPUT_FILE_NAME ./
+            mv $OUTPUT_FILE_NAME "$CURRENT_DIR"
+            
+            cd "$CURRENT_DIR"
+            
             rm -Rf $TEMPFOLDER_PATH
             
             echo $OUTPUT_FILE_NAME - build file name
